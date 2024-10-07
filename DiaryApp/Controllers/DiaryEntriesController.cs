@@ -32,12 +32,24 @@ namespace DiaryApp.Controllers
         [HttpPost]
         public IActionResult Create(DiaryEntry obj)
         {
-            // Add the obj passed from the form to the database
-            _db.DiaryEntries.Add(obj); // Adds new diary entry to the database
-            _db.SaveChanges(); // save changes to database
-            // return RedirectToAction("Index", "Home");
-            return RedirectToAction("Index");
+            // Serverside Validation
 
+            if (obj != null && obj.Title.Length < 3)
+            {
+                // ModelState is a property directly available to controllers. It give details about the state
+                ModelState.AddModelError("Title", "Title too Short");
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Add the obj passed from the form to the database
+                _db.DiaryEntries.Add(obj); // Adds new diary entry to the database
+                _db.SaveChanges(); // save changes to database
+                                   // return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index");
+            }
+
+            return View(obj);
         }
 
     }
