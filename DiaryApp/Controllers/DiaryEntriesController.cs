@@ -26,5 +26,19 @@ namespace DiaryApp.Controllers
         {
             return View();
         }
+
+        // Create Action to handle the form post request
+
+        [HttpPost]
+        public IActionResult Create(DiaryEntry obj)
+        {
+            // Add the obj passed from the form to the database
+            _db.DiaryEntries.Add(obj); // Adds new diary entry to the database
+            _db.SaveChanges(); // save changes to database
+            // return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index");
+
+        }
+
     }
 }
