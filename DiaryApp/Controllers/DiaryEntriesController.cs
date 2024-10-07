@@ -52,7 +52,7 @@ namespace DiaryApp.Controllers
             return View(obj);
         }
 
-
+        [HttpGet]
         public IActionResult Edit(int? id)
         {
             if (id == null || id == 0)
@@ -92,5 +92,49 @@ namespace DiaryApp.Controllers
 
             return View(obj);
         }
+
+        // Delete Action
+
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            DiaryEntry? diaryEntry = _db.DiaryEntries.Find(id);
+
+
+            if (diaryEntry == null)
+            {
+                return NotFound();
+            }
+            return View(diaryEntry);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(DiaryEntry obj)
+        {
+            // Serverside Validation
+
+            if (obj != null && obj.Title.Length < 3)
+            {
+                // ModelState is a property directly available to controllers. It give details about the state
+                ModelState.AddModelError("Title", "Title too Short");
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Add the obj passed from the form to the database
+                _db.DiaryEntries.Remove(obj); // Delete entry in the database
+                _db.SaveChanges(); // save changes to database
+                                   // return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index");
+            }
+
+            return View(obj);
+        }
+
     }
 }
