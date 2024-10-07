@@ -21,5 +21,10 @@ namespace DiaryApp.Controllers
             // Return the list of diary entries to the view
             return View(objDiaryEntryList);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
